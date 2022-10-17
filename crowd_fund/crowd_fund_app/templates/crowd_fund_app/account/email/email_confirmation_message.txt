@@ -1,0 +1,7 @@
+{% extends "account/email/base_message.txt" %}
+{% load account %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Hello {{ user_display }}. You are one step to use your account.  has given your e-mail address to register an account on crowd-fund-app.com.
+PLease, complete the registration process by clicking the following link:
+<p>{{ activate_url }}</p>{% endblocktrans %}{% endautoescape %}{% endblock %}
