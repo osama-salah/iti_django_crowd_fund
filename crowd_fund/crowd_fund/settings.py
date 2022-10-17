@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import datetime
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,8 +36,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crowd_fund_app'
+    'dj_rest_auth',
+    'rest_framework',
+    # 'rest_framework.authtoken',
+    # Registration
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+    'allauth.socialaccount.providers.facebook',
+    'crowd_fund_app',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,7 +66,9 @@ ROOT_URLCONF = 'crowd_fund.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'crowd_fund_app/templates/crowd_fund_app')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +77,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'password_reset_template_load': 'crowd_fund_app.templatetags.password_reset_template_load',
+            }
         },
     },
 ]
@@ -120,3 +138,65 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Crowd-fund-App: '
+
+AUTHENTICATION_BACKENDS = [
+    # allauth specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    # Needed to login by username in Django admin, regardless of allauth
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTH_USER_MODEL = 'crowd_fund_app.CustomUser'
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'crowd_fund_app.serializers.CustomRegisterSerializer',
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        "crowd_fund_app.authentication.ExpiringTokenAuthentication",
+    ]
+}
+
+REST_AUTH_TOKEN_MODEL = "crowd_fund_app.models.Token"
+REST_AUTH_TOKEN_CREATOR = "crowd_fund_app.utils.custom_create_token"
+TOKEN_TTL = datetime.timedelta(days=1)
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'crowdfund-auth'  # The cookie key name
+
+LOGIN_URL = 'http://localhost:8000/dj-rest-auth/login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'app.fundraise@gmail.com'
+EMAIL_HOST_PASSWORD = 'uffovdfidnzaxrls'
+
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'crowd_fund_app.serializers.LoginSerializer',
+    'USER_DETAILS_SERIALIZER': 'crowd_fund_app.serializers.UserDetailsSerializer',
+}
+
+# This is the reference point to where to automatically store uploaded media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'crowd_fund_app/media/crowd_fund_app')
+# The URL when matched is replaced by the MEDIA_ROOT
+MEDIA_URL = 'images/'
+
+CUSTOM_PASSWORD_RESET_CONFIRM = '/password/reset/'

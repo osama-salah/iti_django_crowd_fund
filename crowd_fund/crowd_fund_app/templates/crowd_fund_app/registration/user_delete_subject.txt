@@ -1,0 +1,3 @@
+{% load i18n %}{% autoescape off %}
+{% blocktranslate %}Delete user on {{ site_name }}{% endblocktranslate %}
+{% endautoescape %}

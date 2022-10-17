@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}Edit user: {{ user.username }}{% endblock %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+    <table>
+        {{form.as_table}}
+    </table>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

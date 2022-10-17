@@ -13,9 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from allauth.account import views
+from allauth.account.views import ConfirmEmailView
+from dj_rest_auth.registration.views import VerifyEmailView
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, re_path
+
+from crowd_fund_app.crowd_fund_app.views import FacebookLogin, user_password_reset, CustomPasswordResetView, \
+    CustomPasswordResetConfirmView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('dj-rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
+    # path('/dj-rest-auth/token/verify/', ),
+    path('user/', include('crowd_fund_app.urls')),
 ]
