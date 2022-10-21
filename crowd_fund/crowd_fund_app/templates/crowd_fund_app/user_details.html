@@ -1,0 +1,11 @@
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}Welcome user: {{ user.username }}{% endblock %}
+{% block content %}
+<h2>Welcome {{ user.username }}</h2>
+Navigate to:
+<ul>
+  <li>Edit my details {% url 'user_projects' %}</li>
+</ul>
+{% endblock %}

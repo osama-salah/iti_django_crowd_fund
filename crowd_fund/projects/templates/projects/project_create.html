@@ -1,0 +1,15 @@
+{% extends 'projects/project_base.html' %}
+{% load static %}
+
+{% block title %}Donate{% endblock %}
+{% block content %}
+<h2>Donate to Project: {{ proj_title }}</h2>
+<form action="{% url 'projects:donate'%}" method="post">
+    {%csrf_token%}
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" name="amount"><br>
+    <input type="hidden" name="project_id" value="{{ proj_id }}">
+    <input type="hidden" name="user_id" value="{{ user.id }}">
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
