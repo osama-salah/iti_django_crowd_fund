@@ -1,0 +1,24 @@
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}Set new password{% endblock %}
+{% block content %}
+<form  action="{% url 'password_reset_confirm2' uidb64 token %}" method="POST" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+    {%csrf_token%}
+    <table style="width:100%">
+        <tr>
+            <td style="width:10%"><label for="pass1">Password:</label></td>
+            <td style="width:50%"><input type="text" id="pass1" name="new_password1"></td>
+        </tr>
+        <tr>
+            <td><label for="pass2">Retype password:</label></td>
+            <td><input type="text" id="pass2" name="new_password2"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="uidb64" value="{{ uidb64 }}">
+    <input type="hidden" name="token" value="{{ token }}">
+    <input type="hidden" name="uid" value="{{ uidb64 }}">
+    <input type="hidden" name="token" value="{{ token }}">
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

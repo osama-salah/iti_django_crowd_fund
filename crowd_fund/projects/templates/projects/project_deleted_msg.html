@@ -1,0 +1,8 @@
+{% extends 'projects/project_base.html' %}
+{% load static %}
+
+{% block title %}Project created{% endblock %}
+{% block content %}
+<p>Project created successfully</p>
+<p><a href="{% url 'user_details' %}">Back</a></P>
+{% endblock %}
