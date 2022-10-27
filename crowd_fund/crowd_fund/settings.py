@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.urls import reverse
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -46,7 +48,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'allauth.socialaccount.providers.facebook',
+    # Project apps
+    'projects',
     'crowd_fund_app',
+    'images',
 ]
 
 SITE_ID = 1
@@ -67,7 +72,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'crowd_fund_app/templates/crowd_fund_app')
+            os.path.join(BASE_DIR, 'crowd_fund_app/templates'),
+            os.path.join(BASE_DIR, 'projects/templates'),
+            os.path.join(BASE_DIR, 'crowd_fund/templates'),
+            os.path.join(BASE_DIR, 'images/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -76,6 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
             'libraries': {
                 'password_reset_template_load': 'crowd_fund_app.templatetags.password_reset_template_load',
@@ -173,7 +182,8 @@ REST_FRAMEWORK = {
     ]
 }
 
-REST_AUTH_TOKEN_MODEL = "crowd_fund_app.models.Token"
+# REST_AUTH_TOKEN_MODEL = "crowd_fund_app.models.Token"
+REST_AUTH_TOKEN_MODEL = None
 REST_AUTH_TOKEN_CREATOR = "crowd_fund_app.utils.custom_create_token"
 TOKEN_TTL = datetime.timedelta(days=1)
 
@@ -194,9 +204,14 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'crowd_fund_app.serializers.UserDetailsSerializer',
 }
 
-# This is the reference point to where to automatically store uploaded media
-MEDIA_ROOT = os.path.join(BASE_DIR, 'crowd_fund_app/media/crowd_fund_app')
-# The URL when matched is replaced by the MEDIA_ROOT
-MEDIA_URL = 'images/'
+# # This is the reference point to where to automatically store uploaded media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# # The URL when matched is replaced by the MEDIA_ROOT
+MEDIA_URL = '/media/'
 
 CUSTOM_PASSWORD_RESET_CONFIRM = '/password/reset/'
+EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'user/login'
+EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'user/login'
+
+# To customize email_confirmation_redirect_url
+ACCOUNT_ADAPTER = 'crowd_fund_app.adapter.CustomAccountAdapter'

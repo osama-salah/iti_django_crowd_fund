@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}Crowd-fund app{% endblock %}
+{% block content %}
+Welcome
+{% if request.user.id %}
+    {{ request.user }}
+{% else %}
+    guest
+{% endif %}
+Navigate to:
+<ul>
+    <li><a href="{% url 'projects:projects' %}">Projects</a></li>
+</ul>
+{% endblock %}

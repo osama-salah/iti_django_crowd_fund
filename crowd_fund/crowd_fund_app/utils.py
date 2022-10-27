@@ -11,7 +11,3 @@ def custom_create_token(token_model, user, serializer):
     token.created = utc_now
     token.save()
     return token
-
-
-def format_date_html(date):
-    print(date)
