@@ -1,23 +1,117 @@
-{% extends 'base.html' %}
-{% extends 'project_base.html' %}
+{% extends 'projects/project_base.html' %}
 {% load static %}
 
 {% block title %}Project: {{ title }}{% endblock %}
 {% block content %}
-<table>
+<h2>Project: {{ title }}</h2>
+<p>Created by: {{ user.username }}</p>
+<p>
+    {% if request.user.id %}
+        {% if request.user.id == user_id %}
+            {% if percent_target < 25 %}
+                <span> <a href="{% url 'projects:project_delete' id %}">Delete</a></span>
+                </script>
+            {% endif %}
+            <span> <a href="{% url 'projects:project_update' id %}">Edit</a></span>
+        {% else %}
+            <span><a href="{% url 'projects:donation_create' id title %}">Donate</a></span>
+            <span><a href="{% url 'projects:project_report' id %}">Report</a></span>
+        {% endif %}
+    {% endif %}
+</p>
+
+{% if request.user.id is not None and request.user.id != user_id %}
+    <form method="post" action="{% url 'projects:rate_project' %}">
+    {%csrf_token%}
+    <input type="hidden" name="project_id" value="{{ id }}">
+    <label for="rate">Your rating:</label>
+    <select name="rate" id="rate">
+        <option value="-1" selected="selected"></option>
+        {% for rate_item in rate_items %}
+            <option value="{{ rate_item.0 }}"
+                    {% if user_rate == rate_item.0 %}selected="selected"{% endif %}>{{ rate_item.1 }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+</form>
+{% endif %}
+<p>
     <table>
-        <tr><td style="padding-right:15px;" ><h1>{{ title }}</h1></td></tr>
-        <tr><td>Category</td><td style="padding-right:15px; ">{{ category }}</td></tr>
-        <tr><td>Total target</td><td style="padding-right:15px; ">L.E. {{ total_target }}</td></tr>
-        <tr><td>Tags</td><td style="padding-right:15px; ">
-            {% for tag in tags %}
-            <span class="tag_cell">{{ tag.name }}</span>
+        <tr>
+            <td>Overall Rating: </td>
+            {% for i in "x"|ljust:"5" %}
+                {% if forloop.counter0 < rate %}
+                    <td style="border:1px solid red; background: red; width:10px; height:10px; "></td>
+                {% else %}
+                    <td style="border:1px solid red; width:10px; height:10px; "></td>
+                {% endif %}
             {% endfor %}
-        </td></tr>
-        <tr><td>Start date</td><td style="padding-right:15px; ">{{ start_date }}</td></tr>
-        <tr><td>End date</td><td style="padding-right:15px; ">{{ end_date }}</td></tr>
-        <tr><td>Added at</td><td style="padding-right:15px; ">{{ added_at }}</td></tr>
-        <tr><td>Details: </td><td style="padding-right:15px;border: 1px solid black; ">{{ details }}</td></tr>
+        </tr>
     </table>
+</p>
+
+<table>
+    <tr><td style="width:15%;">Title</td><td style="padding-right:15px; ">{{ title }}</td></tr>
+    <tr><td>Category</td><td style="padding-right:15px; ">{{ category }}</td></tr>
+    <tr><td>Total target</td><td style="padding-right:15px; ">L.E. {{ total_target }}</td></tr>
+    <tr><td>Tags</td><td style="padding-right:15px; ">
+        {% for tag in tags %}
+        <span class="tag_cell">{{ tag.name }}</span>
+        {% endfor %}
+    </td></tr>
+    <tr><td>Start date</td><td style="padding-right:15px; ">{{ start_date }}</td></tr>
+    <tr><td>End date</td><td style="padding-right:15px; ">{{ end_date }}</td></tr>
+    <tr><td>Added at</td><td style="padding-right:15px; ">{{ added_at }}</td></tr>
+    <tr><td>Details: </td><td style="padding-right:15px;border: 1px solid black; ">{{ details }}</td></tr>
+    <tr><td>Images: </td><td style="padding-right:15px;border: 1px solid black; ">
+        {% for image in images%}
+        <image src="{{MEDIA_URL}}projects/images/{{ image }}" style="max-width:200px; max-height:200px;"/>
+        {% endfor %}
+    </td></tr>
 </table>
+<tr><td>Target percent: </td><td>{{ percent_target }} %</td></tr>
+<h3>Comments</h3>
+<p>
+{% if comments %}
+    {% for comment in comments %}
+        <table width="50%">
+            <tr>
+                <td style="border: 1px solid black; width=50%; ">
+                    <div style="color:blue; ">{{ comment.user_id.username }}</div>
+                    <div>
+                        {% if request.user.is_staff %}
+                            (id:{{ comment.id }})
+                        {% endif %}
+                        {{ comment }}
+                    </div>
+                    <div>
+                        <span><a href="">Reply</a></span>
+                        <span><a href="{% url 'projects:comment_report' comment.id %}">Report</a></span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    {% endfor %}
+{% else %}
+    <p>Be the first to comment</p>
+{% endif %}
+</p>
+<form method="post" action="{% url 'projects:comment_create' %}">
+    {%csrf_token%}
+    <input type="hidden" name="project_id" value="{{ id }}">
+    <label for="comment">Add comment:</label><br/>
+    <textarea id="comment" name="comment" maxlength="400" rows="4" cols="53"></textarea><br/>
+    <input type="submit" value="Submit">
+</form>
+
+<h3>Similar projects:</h3>
+{% if similar %}
+    <ul>
+    {% for s in similar%}
+        <li><a href="{% url 'projects:project' s.project.id %}">{{s.project.title}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+No similar projects found
+{% endif %}
 {% endblock %}

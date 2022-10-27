@@ -1,26 +1,8 @@
 {% extends 'projects/project_base.html' %}
 {% load static %}
 
-{% block title %}Project: {{ title }}{% endblock %}
+{% block title %}Project created{% endblock %}
 {% block content %}
-<span><a href="{% url 'projects:donation_create' id title %}">Donate</a></span>
-<h1>{{ title }}</h1>
-<table>
-    <tr><td>Category</td><td style="padding-right:15px; ">{{ category }}</td></tr>
-    <tr><td>Total target</td><td style="padding-right:15px; ">L.E. {{ total_target }}</td></tr>
-    <tr><td>Tags</td><td style="padding-right:15px; ">
-        {% for tag in tags %}
-        <span class="tag_cell">{{ tag.name }}</span>
-        {% endfor %}
-    </td></tr>
-    <tr><td>Start date</td><td style="padding-right:15px; ">{{ start_date }}</td></tr>
-    <tr><td>End date</td><td style="padding-right:15px; ">{{ end_date }}</td></tr>
-    <tr><td>Added at</td><td style="padding-right:15px; ">{{ added_at }}</td></tr>
-    <tr><td>Details: </td><td style="padding-right:15px;border: 1px solid black; ">{{ details }}</td></tr>
-    <tr><td>Images: </td><td style="padding-right:15px;border: 1px solid black; ">
-        {% for image in images%}
-        <image src="{{MEDIA_URL}}projects/images/{{ image }}" style="max-width:200px; max-height:200px;"/>
-        {% endfor %}
-    </td></tr>
-</table>
+<p>Project created successfully</p>
+<p><a href="{% url 'user_details' %}">Back</a></P>
 {% endblock %}

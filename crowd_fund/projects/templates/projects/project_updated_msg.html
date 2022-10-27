@@ -3,6 +3,6 @@
 
 {% block title %}Project created{% endblock %}
 {% block content %}
-<p>Project created successfully</p>
-<p><a href="{% url 'user_details' %}">Back</a></P>
+<p>Project updated successfully</p>
+<p><a href="{% url 'projects:project' project_id %}">Back to the project</a></P>
 {% endblock %}

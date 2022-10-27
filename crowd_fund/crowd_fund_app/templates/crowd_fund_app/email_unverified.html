@@ -1,13 +1,7 @@
 {% extends 'crowd_fund_app/base.html' %}
 {% load static %}
 
-{% block title %}Edit user: {{ user.username }}{% endblock %}
+{% block title %}Email unverified{% endblock %}
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
-    {%csrf_token%}
-    <table>
-        {{form.as_table}}
-    </table>
-    <button type="submit">Submit</button>
-</form>
+Your email {{email}} hasn't been activated yet. Do you want to <a href="{% url 'resend_email_post' email %}">resend an activation message?</a>
 {% endblock %}

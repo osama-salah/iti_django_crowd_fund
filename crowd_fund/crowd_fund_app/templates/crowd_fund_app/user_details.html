@@ -5,7 +5,27 @@
 {% block content %}
 <h2>Welcome {{ user.username }}</h2>
 Navigate to:
+<p><a href="{% url 'projects:project_create' %}">Create project</a></p>
+<h3>My Projects: </h3>
 <ul>
-  <li>Edit my details {% url 'user_projects' %}</li>
+  {% if projects %}
+    {% for project in projects %}
+      <li><a href="{% url 'projects:project' project.id %}">{{ project }}</a></li>
+    {% endfor %}
+  {% else %}
+    <li>You have no projects</li>
+  {% endif %}
 </ul>
+<h3>My Donations: </h3>
+
+  {% if donations %}
+      <table>
+    {% for donation in donations %}
+        <tr><td style="width: 40%;">* {{donation.project_id}}</td><td style="width: 25%;">{{donation.amount}} L.E.</td><td style="width: auto%;">{{donation.date}}</td></tr>
+    {% endfor %}
+      </table>
+  {% else %}
+    <li>You have no donations</li>
+  {% endif %}
+
 {% endblock %}

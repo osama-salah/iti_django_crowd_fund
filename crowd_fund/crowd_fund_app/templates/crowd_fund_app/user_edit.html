@@ -1,9 +1,9 @@
 {% extends 'crowd_fund_app/base.html' %}
 {% load static %}
 
-{% block title %}Edit user: {{ user.username }}{% endblock %}
+{% block title %}Edit users: {{ user.username }}{% endblock %}
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" action="{% url 'user_edit' %}" enctype="multipart/form-data">
     {%csrf_token%}
     <table>
         {{form.as_table}}

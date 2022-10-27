@@ -22,8 +22,8 @@
 
 {% url 'account_email' as email_url %}
 
-<p>This e-mail confirmation link expired or is invalid. Please <a href="{% url 'rest_resend_email' %}">issue a new e-mail confirmation request</a>.</p>
-
+<p>This e-mail confirmation link has expired or is invalid. You can <a href="{% url 'rest_resend_email' %}">issue a new e-mail confirmation request</a>.</p>
+<p>If you have already activated your account, you can <a href="{% url 'rest_login' %}">log in</a></p>
 {% endif %}
 
 {% endblock %}

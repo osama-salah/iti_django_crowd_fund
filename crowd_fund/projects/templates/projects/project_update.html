@@ -1,49 +1,49 @@
 {% extends 'projects/project_base.html' %}
 {% load static %}
 
-{% block title %}Create a project{% endblock %}
+{% block title %}Update a project{% endblock %}
 {% block content %}
-<h2>Please, enter project details</h2>
-<form action="{% url 'projects:project_create'%}" method="post" enctype="multipart/form-data">
+{{project.start_date}}
+<form action="{% url 'projects:project_update' project.id %}" method="post" enctype="multipart/form-data">
     {%csrf_token%}
     <table>
         <tr>
             <td><label for="title">Title:</label></td>
-            <td><input type="text" id="title" name="title"></td>
+            <td><input type="text" id="title" name="title" value="{{ project.title }}"></td>
         </tr>
         <tr>
             <td><label for="details">Details:</label></td>
-            <td> <input type="text" id="details" name="details"></td>
+            <td><textarea id="details" name="details" rows="4" cols="50">{{ project.details }}</textarea></td>
         </tr>
         <tr>
             <td><label for="category">Category:</label></td>
             <td>
-                <select name="category" id="category">
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
+                <select name="category" id="category" value="">
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category == project.category %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
         </select>
             </td>
         </tr>
        <tr>
            <td><label for="total_target">Total target:</label></td>
-           <td><input type="text" id="total_target" name="total_target"></td>
+           <td><input type="text" id="total_target" name="total_target" value="{{ project.total_target }}"></td>
        </tr>
         <tr>
             <td><label for="tags">Tags:</label></td>
             <td><select name="tags" id="tags" multiple>
             {% for tag in tags %}
-                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                <option value="{{ tag.id }}" {% if tag.id in project_tag_ids %}selected{% endif %}>{{ tag.name }}</option>
             {% endfor %}
         </select></td>
         </tr>
         <tr>
             <td><label for="start_date">Start date:</label></td>
-            <td><input type="date" id="start_date" name="start_date"></td>
+            <td><input type="date" id="start_date" name="start_date" value="{{start_date}}"></td>
         </tr>
         <tr>
             <td><label for="end_date">End date:</label></td>
-            <td><input type="date" id="end_date" name="end_date"></td>
+            <td><input type="date" id="end_date" name="end_date" value="{{ end_date }}"></td>
         </tr>
         <tr>
             <td><label for="images">Images:</label></td>

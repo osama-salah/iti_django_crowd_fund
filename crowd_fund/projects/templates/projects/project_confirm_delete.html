@@ -3,6 +3,10 @@
 
 {% block title %}Project created{% endblock %}
 {% block content %}
-<p>Project created successfully</p>
-<p><a href="{% url 'user_details' %}">Back</a></P>
+<form method="POST">
+    {% csrf_token %}
+    <h1>Are you sure you want to delete Project: {{ object }}?</h1>
+    <input type="submit" value="Delete">
+</form>
+<p><a href="{% url 'projects:project' project.id %}">Back</a></P>
 {% endblock %}

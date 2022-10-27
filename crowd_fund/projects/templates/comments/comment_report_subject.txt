@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans %}Delete User E-mail{% endblocktrans %}
+{% blocktrans %}Comment report from Crowd-fund App{% endblocktrans %}
 {% endautoescape %}

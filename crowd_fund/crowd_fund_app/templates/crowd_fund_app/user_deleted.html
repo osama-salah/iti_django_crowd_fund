@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}User deleted{% endblock %}
+{% block content %}
+User {{ username }} deleted successfully.
+<p>Redirecting in 5 secs...</p>
+<meta http-equiv = "refresh" content = "5; url = {% url 'home' %}" />
+{% endblock %}

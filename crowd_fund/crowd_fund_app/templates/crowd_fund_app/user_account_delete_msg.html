@@ -1,9 +1,9 @@
 {% extends 'crowd_fund_app/base.html' %}
 {% load static %}
 
-{% block title %}Logged out{% endblock %}
+{% block title %}Delete confirm{% endblock %}
 {% block content %}
-You have successfully logged out.
-<p>Redirecting in 3 secs...</p>
-<meta http-equiv = "refresh" content = "3; url = {% url 'home' %}" />
+{{ msg }}
+<p>Redirecting in 10 secs...</p>
+<meta http-equiv = "refresh" content = "10; url = {% url 'home' %}" />
 {% endblock %}

@@ -5,8 +5,8 @@
 {% block content %}
     {% autoescape off %}
         {% blocktrans %}
-            User {{ username }} reported the comment with id: {{ comment_id }} at project: {{ project_title }}.
-            You can find this comment at:
+            User {{ username }} reported the project: {{ project_title }}.
+            You can find this project at:
             <p>{{ url }}</p>
         {% endblocktrans %}
     {% endautoescape %}

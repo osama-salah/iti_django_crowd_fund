@@ -1,19 +1,9 @@
 {% extends 'crowd_fund_app/base.html' %}
 {% load static %}
 
-{% block title %}Welcome user: {{ user.username }}{% endblock %}
+{% block title %}Logged out{% endblock %}
 {% block content %}
-<h2>Welcome {{ user.username }}</h2>
-Navigate to:
-<p><a href="{% url 'projects:project_create' %}">Create project</a></p>
-<h3>My Projects: </h3>
-<ul>
-  {% if project %}
-    {% for project in projects %}
-      <li><a href="{% url 'projects:project' project.id %}">{{ project }}</a></li>
-    {% endfor %}
-  {% else %}
-    <li>You have no projects</li>
-  {% endif %}
-</ul>
+You have successfully logged out.
+<p>Redirecting in 3 secs...</p>
+<meta http-equiv = "refresh" content = "3; url = {% url 'home' %}" />
 {% endblock %}
