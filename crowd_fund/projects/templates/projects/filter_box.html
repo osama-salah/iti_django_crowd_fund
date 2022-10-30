@@ -1,0 +1,16 @@
+{% block search_box %}
+<p>
+<form method="get" action="{% url 'projects:projects'%}">
+<!--    {%csrf_token%}-->
+    <label for="category">Fundraise for:</label>
+    <select id="category" name="category">
+        <option value="-1" selected="selected">All</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}"
+                    {% if category_displayed == category.id %}selected="selected"{% endif %}> {{ category.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Go">
+</form>
+</p>
+{% endblock %}
