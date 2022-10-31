@@ -1,0 +1,13 @@
+{% extends "account/email/base_message.txt" %}
+{% load password_reset_template_load %}
+{% load i18n %}
+
+{% block content %}
+    {% autoescape off %}
+        {% blocktrans %}
+            User {{ username }} reported the comment with id: {{ comment_id }} at project: {{ project_title }}.
+            You can find this comment at:
+            <p>{{ url }}</p>
+        {% endblocktrans %}
+    {% endautoescape %}
+{% endblock %}
