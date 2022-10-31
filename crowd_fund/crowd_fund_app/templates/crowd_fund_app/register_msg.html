@@ -1,0 +1,8 @@
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}Welcome user: {{ user.username }}{% endblock %}
+{% block content %}
+{{ message }}
+<p><a href="{% url 'rest_login' %}">Back</a></p>
+{% endblock %}

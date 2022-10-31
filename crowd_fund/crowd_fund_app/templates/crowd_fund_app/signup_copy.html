@@ -1,0 +1,27 @@
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}User deleted{% endblock %}
+{% block content %}
+Signup:
+<form method="post" action="{% url 'rest_register' %}" style="background: lightgrey; padding:10px; ">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email"><br>
+    <label for="password1">Password</label>
+    <input type="password1" id="password1" name="password1"><br>
+    <label for="password2">Retype password</label>
+    <input type="password2" id="password2" name="password2"><br>
+    <label for="firstname">First name</label>
+    <input type="firstname" id="firstname" name="firstname"><br>
+    <label for="lastname">Last name</label>
+    <input type="lastname" id="lastname" name="lastname"><br>
+    <label for="mobile">Mobile</label>
+    <input type="mobile" id="mobile" name="mobile"><br>
+    <label for="picture">Picture</label>
+    <input type="picture" id="picture" name="picture"><br>
+    <input type="submit">
+    <input type="reset">
+</form>
+{% endblock %}

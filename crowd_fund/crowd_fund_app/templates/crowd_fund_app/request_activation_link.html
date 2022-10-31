@@ -1,0 +1,10 @@
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}Registration{% endblock %}
+{% block content %}
+{% for msg in  messages %}
+<p style="color: darkred; ">{{ msg }}</p>
+{% endfor %}
+<p><a href="javascript:history.back()">Back</a></p>
+{% endblock %}
