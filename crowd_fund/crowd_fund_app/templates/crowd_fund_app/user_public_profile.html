@@ -1,0 +1,27 @@
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}User profile: {{ user.username }}{% endblock %}
+{% block content %}
+<img src="{{MEDIA_URL}}{{form.picture.value}}" style="max-width: 100px; max-height: 100px; "/>
+<table>
+    <tr><td style="width:auto%; font-weight:bold; ">Username</td><td style="width:70%; ">{{form.username.value}}</td></tr>
+    <tr><td style=" font-weight:bold; ">First name</td><td>{{form.first_name.value}}</td></tr>
+    <tr><td style=" font-weight:bold; ">Last name</td><td>{{form.last_name.value}}</td></tr>
+    <tr><td style=" font-weight:bold; ">Email</td><td>{{form.email.value}}</td></tr>
+    <tr><td style=" font-weight:bold; ">Mobile</td><td>{{form.mobile.value}}</td></tr>
+    <tr><td style=" font-weight:bold; ">Birthdate</td><td>{{form.birthdate.value}}</td></tr>
+    <tr><td style=" font-weight:bold; ">Country</td><td>{{form.country.value}}</td></tr>
+        <tr><td style=" font-weight:bold; ">Facebook profile</td>
+            <td>
+                {% if form.facebook_profile.value is not None %}
+                    <a href="{{form.facebook_profile.value}}">{{form.facebook_profile.value}}</a>
+                {% else %}
+                    {{form.facebook_profile.value}}
+                {% endif %}
+            </td>
+        </tr>
+</table>
+<p></p><a href="{% url 'user_edit' %}">Edit my profile</a></p>
+<p></p><a href="{% url 'user_delete_direct' %}">Delete my account</a></p>
+{% endblock %}
