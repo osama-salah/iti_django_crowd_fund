@@ -19,18 +19,34 @@
 
 {% block content %}
     <h3>Top projects:</h3>
-    <div class="center"><div style="width:60%; height:50%; ">{% include "projects/project_carousel.html" with top_rated=top_rated %}</div></div>
+    {% if top_rated %}
+        <div class="center"><div style="width:60%; height:50%; ">{% include "projects/project_carousel.html" with top_rated=top_rated %}</div></div>
+    {% else %}
+        <p>No projects found</p>
+    {% endif %}
 
     <h3>Latest projects:</h3>
-    <ul>
-    {% for p in latest %}
-        <li><a href="{% url 'projects:project' p.id %}">{{ p.title }}</a></li>
-    {% endfor %}
-    </ul>
+    {% if latest %}
+        <ul>
+        {% for p in latest %}
+            <li><a href="{% url 'projects:project' p.id %}">{{ p.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No projects found</p>
+    {% endif %}
+
     <h3>Featured projects:</h3>
-    <ul>
-    {% for p in featured %}
-        <li><a href="{% url 'projects:project' p.project_id.id %}">{{ p.project_id.title }}</a></li>
-    {% endfor %}
-    </ul>
+    {% if featured %}
+        <ul>
+        {% for p in featured %}
+            <li><a href="{% url 'projects:project' p.project_id.id %}">{{ p.project_id.title }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No projects found</p>
+    {% endif %}
+{% endblock %}
+{% block right_panel %}
+<ul><li><a href="{% url 'projects:project_create' %}">Create project</a></li></ul>
 {% endblock %}
