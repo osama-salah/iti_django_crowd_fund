@@ -23,6 +23,9 @@ class CommentReply(models.Model):
     comment_id = models.ForeignKey(to='ProjectComment', related_name='replies', on_delete=models.CASCADE)
     user_id = models.ForeignKey(to=CustomUser, related_name='replies', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.reply
+
 
 class ProjectComment(models.Model):
     comment = models.TextField(max_length=1024)
@@ -68,6 +71,14 @@ class ProjectRate(models.Model):
     rate = models.IntegerField(choices=Choices.choices)
     project_id = models.ForeignKey(Project, models.CASCADE, related_name='rates')
     user_id = models.ForeignKey(CustomUser, models.CASCADE, related_name='rates')
+
+
+class FeaturedProject(models.Model):
+    project_id = models.OneToOneField(Project, models.CASCADE)
+
+
+    def __str__(self):
+        return self.project_id.title
 
 
 class Donation(models.Model):

@@ -5,9 +5,11 @@
 {% block content %}
     {% autoescape off %}
         {% blocktrans %}
-            User {{ username }} reported the comment with id: {{ comment_id }} at project: {{ project_title }}.
-            You can find this comment at:
-            <p>{{ url }}</p>
+            User {{ username }} reported the reply with id: {{ reply_id }} of the comment with id: {{ comment_id }} at project: {{ project_title }}.
+            The reported content is:
+            {{ reply }}
+            You can find this reply at:
+            {{ url }}/#reply{{ reply_id }}
         {% endblocktrans %}
     {% endautoescape %}
 {% endblock %}

@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans %}Comment report from Crowd-fund App{% endblocktrans %}
+{% blocktrans %}Reply report from Crowd-fund App{% endblocktrans %}
 {% endautoescape %}

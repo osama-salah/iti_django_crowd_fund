@@ -3,8 +3,10 @@
 
 {% block title %}Registration{% endblock %}
 {% block content %}
-{% for msg in  messages %}
-<p style="color: darkred; ">{{ msg }}</p>
-{% endfor %}
-<p><a href="javascript:history.back()">Back</a></p>
+<form method="post"  action="{% url 'resend_email_form' %}">
+    {% csrf_token %}
+    <label for="email">Email: </label>
+    <input type="text" id="email" name="email">
+    <input type="submit">
+</form>
 {% endblock %}

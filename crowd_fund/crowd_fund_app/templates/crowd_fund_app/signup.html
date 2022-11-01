@@ -1,7 +1,14 @@
-Login:
-<form method="post" action="{% url 'rest_login' %}" style="background: lightgrey; padding:10px; ">
-    <input type="text" id="email" name="email">
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password">
-    <input type="submit">
+{% extends 'crowd_fund_app/base.html' %}
+{% load static %}
+
+{% block title %}Sign up{% endblock %}
+{% block content %}
+Signup:
+<form method="POST" enctype="multipart/form-data" action="{% url 'user_register' %}">
+    {%csrf_token%}
+    <table style="width:30%;text-align:left;">
+    {{form.as_table}}
+    </table>
+    <button type="submit">Sign up</button>
 </form>
+{% endblock %}

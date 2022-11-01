@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from images.models import ProjectImage
-from projects.models import Project, ProjectCategory, ProjectTag
+from projects.models import Project, ProjectCategory, ProjectTag, FeaturedProject
 
 admin.site.register(ProjectCategory)
 admin.site.register(ProjectTag)
@@ -17,3 +17,6 @@ class ProjectAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Project
+
+
+admin.site.register(FeaturedProject)

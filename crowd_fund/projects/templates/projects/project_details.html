@@ -2,9 +2,12 @@
 {% load static %}
 
 {% block title %}Project: {{ title }}{% endblock %}
-{% block content %}
-<h2>Project: {{ title }}</h2>
-<p>Created by: {{ user.username }}</p>
+{% block project_links %}
+    <link rel="stylesheet" href="{% static 'projects/css/carousel_layout.css' %}"/>
+{% endblock %}
+{% block project_content %}
+<h2 style="font: Arial; color: darkblue; text-align: center; ">{{ title }}</h2>
+Created by: <a href="{% url 'user_public_profile' user.id %}">{{ user.username }}</a>
 <p>
     {% if request.user.id %}
         {% if request.user.id == user_id %}
@@ -50,8 +53,10 @@
     </table>
 </p>
 
+<div class="center"><div>{% include "projects/project_image_carousel.html" with images=images %}</div></div>
+
 <table>
-    <tr><td style="width:15%;">Title</td><td style="padding-right:15px; ">{{ title }}</td></tr>
+    {# <tr><td style="width:15%;">Title</td><td style="padding-right:15px; ">{{ title }}</td></tr> #}
     <tr><td>Category</td><td style="padding-right:15px; ">{{ category }}</td></tr>
     <tr><td>Total target</td><td style="padding-right:15px; ">L.E. {{ total_target }}</td></tr>
     <tr><td>Tags</td><td style="padding-right:15px; ">
@@ -63,31 +68,60 @@
     <tr><td>End date</td><td style="padding-right:15px; ">{{ end_date }}</td></tr>
     <tr><td>Added at</td><td style="padding-right:15px; ">{{ added_at }}</td></tr>
     <tr><td>Details: </td><td style="padding-right:15px;border: 1px solid black; ">{{ details }}</td></tr>
-    <tr><td>Images: </td><td style="padding-right:15px;border: 1px solid black; ">
-        {% for image in images%}
-        <image src="{{MEDIA_URL}}projects/images/{{ image }}" style="max-width:200px; max-height:200px;"/>
-        {% endfor %}
-    </td></tr>
+    <tr><td>Target percent: </td><td>{{ percent_target }} %</td></tr>
 </table>
-<tr><td>Target percent: </td><td>{{ percent_target }} %</td></tr>
 <h3>Comments</h3>
 <p>
 {% if comments %}
     {% for comment in comments %}
         <table width="50%">
             <tr>
-                <td style="border: 1px solid black; width=50%; ">
-                    <div style="color:blue; ">{{ comment.user_id.username }}</div>
+                <td style="border: 1px solid black; width=50%; background-color: beige; ">
+                    <a href="{% url 'user_public_profile' comment.user_id.id %}">{{ comment.user_id.username }}</a>
                     <div>
                         {% if request.user.is_staff %}
                             (id:{{ comment.id }})
                         {% endif %}
+                        <a id="comment{{comment.id}}"></a>
                         {{ comment }}
                     </div>
                     <div>
-                        <span><a href="">Reply</a></span>
-                        <span><a href="{% url 'projects:comment_report' comment.id %}">Report</a></span>
+                        <span>
+                            <a href="javascript: void(0)" onclick="document.getElementById('replyField{{forloop.counter0}}').style.display = 'block';">Reply</a>
+                            <span><a href="{% url 'projects:comment_report' comment.id %}">Report</a></span>
+                            <div id="replyField{{forloop.counter0}}" style="display:none;">
+                                <form method="post" action="{% url 'projects:reply_create' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                    <input type="hidden" name="project_id" value="{{ id }}">
+                                    <textarea id="textInput" name="reply" maxlength="400" rows="4" style="resize: none; width:100%; "></textarea><br>
+                                    <input type="submit">
+                                </form>
+                            </div>
+                        </span>
                     </div>
+                    {# Reply boxes #}
+                    {% for reply in comment.replies.all %}
+                    <div style="padding: 0 2px ;">
+                        <table width="100%">
+                            <tr>
+                                <td style="border: 1px solid black; width=100%; background-color: white; ">
+                                    <a href="{% url 'user_public_profile' reply.user_id.id %}">{{ reply.user_id.username }}</a>
+                                    <div>
+                                        {% if request.user.is_staff %}
+                                            (id:{{ reply.id }})
+                                        {% endif %}
+                                        <a id="reply{{reply.id}}"></a>
+                                        {{ reply }}
+                                    </div>
+                                    <div>
+                                        <span><a href="{% url 'projects:reply_report' comment.id reply.id %}">Report</a></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endfor %}
                 </td>
             </tr>
         </table>
@@ -103,9 +137,11 @@
     <textarea id="comment" name="comment" maxlength="400" rows="4" cols="53"></textarea><br/>
     <input type="submit" value="Submit">
 </form>
+{% endblock %}
 
-<h3>Similar projects:</h3>
+{% block right_panel %}
 {% if similar %}
+<div style="padding: 5px; ">Similar projects:</div>
     <ul>
     {% for s in similar%}
         <li><a href="{% url 'projects:project' s.project.id %}">{{s.project.title}}</a></li>

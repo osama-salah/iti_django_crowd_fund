@@ -1,12 +1,9 @@
 <div class="slideshow-container">
-{% for p in top_rated %}
-  <a href="{% url 'projects:project' p.id %}">
-    <div class="mySlides fade">
-      <div class="numbertext">{{ forloop.counter }} / {{ top_rated|length }}</div>
-      <img src="{{MEDIA_URL}}{{ p.images.all.first }}" style="width:100%">
-      <div class="text">{{ p.title }}</div>
-    </div>
-  </a>
+{% for image in images %}
+  <div class="mySlides fade">
+    <div class="numbertext">{{ forloop.counter }} / {{ images|length }}</div>
+    <image src="{{MEDIA_URL}}projects/images/{{ image }}" style="max-width:500px; max-height:500px;"/>
+  </div>
 {% endfor %}
 <a class="prev" onclick="plusSlides(-1)">❮</a>
 <a class="next" onclick="plusSlides(1)">❯</a>
@@ -15,7 +12,7 @@
 <br>
 
 <div style="text-align:center">
-  {% for p in top_rated %}
+  {% for image in images %}
     <span class="dot" onclick="currentSlide({{ forloop.counter }})"></span>
   {% endfor %}
 </div>

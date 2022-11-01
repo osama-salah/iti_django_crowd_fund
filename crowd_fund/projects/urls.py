@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from rest_framework.routers import SimpleRouter
 
 from projects.projects.views import ProjectViewSet, DonationViewSet, donation_create, project_create, ProjectDelete, \
-    project_update, comment_create, comment_report, rate_project, project_report
+    project_update, comment_create, comment_report, rate_project, project_report, reply_create
 
 app_name = 'projects'
 
@@ -18,8 +18,9 @@ urlpatterns = [
     path('donate/', DonationViewSet.as_view({'post': 'create'}), name='donate'),
     path('project_create/', project_create, name='project_create'),
     path('comment/', comment_create, name='comment_create'),
-    path('comment/report/<comment_id>', comment_report, name='comment_report'),
-    path('reply/', comment_create, name='reply_create'),
+    path('comment/report/<comment_id>/', comment_report, name='comment_report'),
+    path('reply/report/<comment_id>/<reply_id>/', comment_report, name='reply_report'),
+    path('reply/', reply_create, name='reply_create'),
     path('rate/', rate_project, name='rate_project'),
     path('', ProjectViewSet.as_view({'get': 'list'}), name='projects'),
 ]

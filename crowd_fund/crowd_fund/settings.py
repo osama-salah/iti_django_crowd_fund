@@ -55,6 +55,10 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+APP_SECRET = "abc123"
+
+# This should be put in an env var
+FACEBOOK_CLIENT_ID = '1570738886678657'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,9 +90,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
             ],
-            'libraries': {
-                'password_reset_template_load': 'crowd_fund_app.templatetags.password_reset_template_load',
-            }
         },
     },
 ]
@@ -184,8 +185,7 @@ REST_FRAMEWORK = {
 
 # REST_AUTH_TOKEN_MODEL = "crowd_fund_app.models.Token"
 REST_AUTH_TOKEN_MODEL = None
-REST_AUTH_TOKEN_CREATOR = "crowd_fund_app.utils.custom_create_token"
-TOKEN_TTL = datetime.timedelta(days=1)
+EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'crowdfund-auth'  # The cookie key name
@@ -202,6 +202,7 @@ EMAIL_HOST_PASSWORD = 'uffovdfidnzaxrls'
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'crowd_fund_app.serializers.LoginSerializer',
     'USER_DETAILS_SERIALIZER': 'crowd_fund_app.serializers.UserDetailsSerializer',
+    'REGISTER_SERIALIZER': 'crowd_fund_app.serializers.CustomRegisterSerializer',
 }
 
 # # This is the reference point to where to automatically store uploaded media

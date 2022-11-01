@@ -5,4 +5,13 @@
 .tag_cell{
     border: 1px solid black;
     padding: 1px;
+    background-color: lightblue;
+}
+
+table > tbody > tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table-not-striped tbody tr:nth-of-type(even) {
+background-color: rgba(0, 0, 0, 0)
 }

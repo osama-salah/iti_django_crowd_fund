@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from crowd_fund import settings
+from crowd_fund.views import render_home
 from crowd_fund_app.crowd_fund_app.views import FacebookLogin
 
 urlpatterns = [
@@ -28,7 +29,7 @@ urlpatterns = [
     path('projects/', include('projects.urls')),
     path('user/', include('crowd_fund_app.urls')),
     path('image/', include('images.urls')),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', render_home, name='home'),
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

@@ -1,12 +1,16 @@
 {% extends 'projects/project_base.html' %}
 {% load static %}
 {% block title %}Project list{% endblock %}
-{% block content %}
+{% block project_content %}
+<table>
 {% for project_data in response %}
-    <table style="line-height:150%; ">
-        <tr ><td style="padding-right:15px; width:200px; " ><h3><a href="{% url 'projects:project' project_data.id %}">{{ project_data.title }}</a></h3></td></tr>
+    <tr><td>
+    <table class="table-not-striped">
+        <tr>
+            <td style="padding-right:15px; width:200px; " ><h3><a href="{% url 'projects:project' project_data.id %}">{{ project_data.title }}</a></h3></td>
+            <td rowspan="5"><image src="{{MEDIA_URL}}{{ project_data.icon_image }}" style="max-width:200px; max-height:200px;"/>
+        </tr>
         <tr><td>Created by:<div style="text-align: center;">{{project_data.user.username}}</div></td>
-        <td rowspan="4"><image src="{{MEDIA_URL}}{{ project_data.icon_image }}" style="max-width:200px; max-height:200px;"/>
         </tr>
         <tr>
             <td>{{ project_data.category }}</td>
@@ -19,7 +23,7 @@
             </td>
         </tr>
         <tr><td>
-            <div>
+<!--            <div>-->
                 <table>
                     {% for i in "x"|ljust:"5" %}
                         {% if forloop.counter0 < project_data.rate %}
@@ -30,7 +34,7 @@
                     {% endfor %}
                     </tr>
                 </table>
-            </div>
+<!--            </div>-->
         </td></tr>
         {# <tr><td>Category</td><td style="padding-right:15px; ">{{ project_data.category }}</td></tr> #}
         {# <tr><td>Total target</td><td style="padding-right:15px; ">L.E. {{ project_data.total_target }}</td></tr> #}
@@ -43,6 +47,8 @@
         {# <tr><td>End date</td><td style="padding-right:15px; ">{{ project_data.end_date }}</td></tr> #}
         {# <tr><td>Added at</td><td style="padding-right:15px; ">{{ project_data.added_at }}</td></tr> #}
         {# <tr><td>Details: </td><td style="padding-right:15px;border: 1px solid black; ">{{ project_data.details }}</td></tr> #}
+    </td></tr>
     </table>
 {% endfor %}
+</table>
 {% endblock %}

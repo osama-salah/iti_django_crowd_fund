@@ -2,15 +2,35 @@
 {% load static %}
 
 {% block title %}Crowd-fund app{% endblock %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'projects/css/carousel_layout.css' %}"/>
+{% endblock %}
+{% block header %}
+<div class="welcome-msg">
+    Welcome
+    {% if request.user.id %}
+        {{ request.user }}
+    {% else %}
+        guest
+    {% endif %}
+</div>
+{% include "projects/projects_header.html" %}
+{% endblock %}
+
 {% block content %}
-Welcome
-{% if request.user.id %}
-    {{ request.user }}
-{% else %}
-    guest
-{% endif %}
-Navigate to:
-<ul>
-    <li><a href="{% url 'projects:projects' %}">Projects</a></li>
-</ul>
+    <h3>Top projects:</h3>
+    <div class="center"><div style="width:60%; height:50%; ">{% include "projects/project_carousel.html" with top_rated=top_rated %}</div></div>
+
+    <h3>Latest projects:</h3>
+    <ul>
+    {% for p in latest %}
+        <li><a href="{% url 'projects:project' p.id %}">{{ p.title }}</a></li>
+    {% endfor %}
+    </ul>
+    <h3>Featured projects:</h3>
+    <ul>
+    {% for p in featured %}
+        <li><a href="{% url 'projects:project' p.project_id.id %}">{{ p.project_id.title }}</a></li>
+    {% endfor %}
+    </ul>
 {% endblock %}

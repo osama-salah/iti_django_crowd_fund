@@ -1,5 +1,5 @@
 import os
-from itertools import count
+from itertools import count, chain
 from statistics import mean, StatisticsError
 
 from allauth.account.adapter import DefaultAccountAdapter
@@ -14,16 +14,16 @@ from rest_framework import viewsets
 
 from crowd_fund_app.models import CustomUser
 from images.models import ProjectImage
-from projects.models import Project, ProjectCategory, ProjectTag, Donation, ProjectComment, ProjectRate
+from projects.models import Project, ProjectCategory, ProjectTag, Donation, ProjectComment, ProjectRate, CommentReply
 from projects.serializers import ProjectSerializer, DonationSerializer
 
 
 def reply_create(request):
-    # TODO: complete this
-    user_id = request.user
-    project_id = request.POST['project_id']
-    project = Project.objects.get(pk=project_id)
-    ProjectComment.objects.create(comment=request.POST['comment'], project_id=project, user_id=user_id)
+    user = request.user
+    comment_id = request.POST['comment_id']
+    comment = ProjectComment.objects.get(pk=comment_id)
+    CommentReply.objects.create(reply=request.POST['reply'], comment_id=comment, user_id=user)
+    project_id = request.POST.get('project_id')
     return redirect(reverse('projects:project', args=(project_id, )))
 
 
@@ -32,12 +32,14 @@ class ReportAdapter(DefaultAccountAdapter):
         return HttpResponse('Your report was sent to site admins')
 
 
-def comment_report(request, comment_id):
+def comment_report(request, comment_id, reply_id=None):
     user = request.user
     if user.id is None:
         return HttpResponse("You must be logged in", status=400)
 
     comment = ProjectComment.objects.get(id=comment_id)
+    reply = CommentReply.objects.get(id=reply_id) if reply_id else None
+
     project = Project.objects.get(id=comment.project_id.id)
     current_site = get_current_site(request)
     staff = CustomUser.objects.filter(is_staff=True)
@@ -49,12 +51,16 @@ def comment_report(request, comment_id):
             'current_site': current_site,
             'username': user.username,
             'project_title': project.title,
-            'comment_id': comment.id,
+            'comment_id': comment_id,
+            'comment': comment,
+            'reply_id': reply_id,
+            'reply': reply,
             'url': url,
             'request': request,
         }
         adapter = ReportAdapter(request)
-        adapter.send_mail('comments/comment_report', email, context)
+        template_prefix = 'comments/reply_report' if reply_id else 'comments/comment_report'
+        adapter.send_mail(template_prefix, email, context)
 
     return render(request, 'comments/comment_reported.html',
                   context={'url': reverse('projects:project', args=(project.id,))})
@@ -191,6 +197,11 @@ def project_create(request):
                                'tags': ProjectTag.objects.all()})
 
 
+def get_project_rates(project):
+    rates = [r[0] for r in project.rates.values_list('rate')]
+    return rates if rates else [0]
+
+
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
@@ -198,7 +209,24 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # return Project.objects.filter(user_id__id=self.request.user.id)
-        return Project.objects.all()
+        # print(self.request.query_params['category'])
+        category = self.request.query_params.get('category', None)
+        if category and category != "-1":
+            response = Project.objects.filter(category=category)
+        else:
+            response = Project.objects.all()
+        search_string = self.request.query_params.get('search_string', None)
+        if search_string:
+            search_by = self.request.query_params.get('search_by', None)
+            if search_by == 'title':
+                response = response.filter(title__icontains=search_string)
+            elif search_by == 'tag':
+                tags = ProjectTag.objects.filter(name__icontains=search_string)
+                response = list(response.filter(tags__in=tags))
+            else:
+                tags = list(ProjectTag.objects.filter(name__icontains=search_string))
+                response = set(chain(response.filter(title__icontains=search_string), response.filter(tags__in=tags)))
+        return response
 
     def list(self, request, *args, **kwargs):
         response = super().list(request.data, args, kwargs)
@@ -216,7 +244,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
             project_data['user'] = CustomUser.objects.get(id=project_data['user_id'])
             project_data['comments'] = ProjectComment.objects.filter(project_id__id=project_data['id'])
 
-        return render(request, 'projects/project_list.html', {'response': sorted(response.data, key=lambda e: e['id'])})
+        categories = ProjectCategory.objects.all()
+        category_displayed = int(self.request.query_params.get('category', '-1'))
+
+        return render(request, 'projects/project_list.html', {
+            'response': sorted(response.data, key=lambda e: e['id']),
+            'categories': categories,
+            'category_displayed': category_displayed,
+        })
 
     def retrieve(self, request, pk=None):
         response = super().retrieve(request, pk)

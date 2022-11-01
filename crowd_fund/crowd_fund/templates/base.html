@@ -3,30 +3,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/layout.css' %}"/>
+    <link rel="stylesheet" href="{% static 'crowd_fund_app/css/layout.css' %}"/>
     {% block links %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
 <header>
     <h1>Welcome to Crowd-fund App</h1>
-    <a href="{% url 'home' %}">Home</a>
-    {% if request.user.id %}
-    <a href="{% url 'user_logout' %}">Logout</a>
-    <a href="{% url 'user_details' %}">My panel</a>
-    <a href="{% url 'user_profile' %}">My profile</a>
-    {% else %}
-    <a href="{% url 'rest_login' %}">Login</a>
-    <a href="{% url 'rest_register' %}">Signup</a>
-    {% endif %}
+    <div style="background-color: lightgrey; ">
+        <a href="{% url 'home' %}">Home</a>
+        {% if request.user.id %}
+        <a href="{% url 'user_logout' %}">Logout</a>
+        <a href="{% url 'user_details' %}">My panel</a>
+        <a href="{% url 'user_profile' %}">My profile</a>
+        {% else %}
+        <a href="{% url 'signup' %}">Signup</a>
+        {% endif %}
+        {% block header %}
+        {% endblock %}
+    </div>
 </header>
 
 <p>
-{% block content %}
-{% endblock %}
+<div class="row">
+    <div class="left">
+    {% block content %}
+    {% endblock %}
+    </div>
+    <div class="right">
+        {% if not request.user.id %}
+            {% include "crowd_fund_app/login.html" %}
+        {% endif %}
+        <div style="padding: 5px; ">
+        Navigate to:
+        <ul>
+            <li><a href="{% url 'projects:projects' %}">All Projects</a></li>
+        </ul>
+        </div>
+        {% block right_panel %}
+        {% endblock %}
+    </div>
+</div>
 </p>
 
-<footer>
+<footer style="background-color: lightgrey; ">
     Copyrights reserved 2022
 </footer>
 </body>

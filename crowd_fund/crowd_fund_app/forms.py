@@ -48,7 +48,10 @@ class UserDeleteForm(AllAuthPasswordResetForm):
         return self.cleaned_data['email']
 
 
-class UserRegister(forms.ModelForm):
+class UserRegisterForm(forms.ModelForm):
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput())
+    password2 = forms.CharField(label="Retype password", widget=forms.PasswordInput())
+
     class Meta:
         model = CustomUser
         fields = ("username", "first_name", "last_name", "email", "mobile", "picture")

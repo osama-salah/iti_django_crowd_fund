@@ -2,4 +2,13 @@
 {% load static %}
 {% block links %}
 <link rel="stylesheet" href="{% static 'projects/css/project_layout.css' %}"/>
+{% block project_links %}
+{% endblock %}
+{% endblock %}
+{% block header %}
+{% include 'projects/projects_header.html' %}
+{% endblock %}
+{% block content %}
+{% block project_content %}
+{% endblock %}
 {% endblock %}

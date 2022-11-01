@@ -3,7 +3,7 @@
 
 {% block title %}User profile: {{ user.username }}{% endblock %}
 {% block content %}
-<img src="{{MEDIA_URL}}{{form.picture.value}}" style="max-width: 100px; max-height: 100px; "/>
+<img src="{{MEDIA_URL}}{{form.picture.value}}" style="max-width: 200px; max-height: 200px; "/>
 <table>
     <tr><td style="width:auto%; font-weight:bold; ">Username</td><td style="width:70%; ">{{form.username.value}}</td></tr>
     <tr><td style=" font-weight:bold; ">First name</td><td>{{form.first_name.value}}</td></tr>

@@ -1,16 +1,28 @@
 {% block search_box %}
-<p>
+<div style="background-color:light grey; ">
 <form method="get" action="{% url 'projects:projects'%}">
-<!--    {%csrf_token%}-->
-    <label for="category">Fundraise for:</label>
-    <select id="category" name="category">
-        <option value="-1" selected="selected">All</option>
-        {% for category in categories %}
-            <option value="{{ category.id }}"
-                    {% if category_displayed == category.id %}selected="selected"{% endif %}> {{ category.name }}</option>
-        {% endfor %}
+    <label for="search_by">Find a project by:</label>
+    <select id="search_by" name="search_by">
+        {% if request.GET.search_by == "title" %}
+        <option value="title" selected="selected">Title</option>
+        {% else %}
+        <option value="title">Title</option>
+        {% endif %}
+        {% if request.GET.search_by == "tag" %}
+        <option value="tag" selected="selected">Tag</option>
+        {% else %}
+        <option value="tag">Tag</option>
+        {% endif %}
+        {% if request.GET.search_by == "both" %}
+        <option value="both" selected="selected">Both</option>
+        {% else %}
+        <option value="both">Both</option>
+        {% endif %}
     </select>
+    <label for="search_string">search string:</label>
+    <input id="search_string" name="search_string" type="text" value="{{ request.GET.search_string }}">
     <input type="submit" value="Go">
+<!--    <input type="">-->
 </form>
-</p>
+</div>
 {% endblock %}

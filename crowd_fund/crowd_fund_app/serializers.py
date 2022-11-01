@@ -1,13 +1,10 @@
-from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import get_user_model
-from django.db import transaction
-from rest_framework import serializers, exceptions
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import LoginSerializer as RestAuthLoginSerializer, UserDetailsSerializer, \
     PasswordResetSerializer
-from rest_framework.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from rest_framework import serializers
 
-from crowd_fund import settings
 from crowd_fund_app.forms import UserDeleteForm
 from crowd_fund_app.models import CustomUser
 
@@ -20,30 +17,6 @@ class CustomUserDeleteSerializer(PasswordResetSerializer):
 
 class LoginSerializer(RestAuthLoginSerializer):
     username = None
-
-    # def validate(self, attrs):
-    #     username = attrs.get('username')
-    #     email = attrs.get('email')
-    #     password = attrs.get('password')
-    #     user = self.get_auth_user(username, email, password)
-    #
-    #     if not user:
-    #         msg = _('Unable to log in with provided credentials.')
-    #         raise exceptions.ValidationError(msg)
-    #
-    #     # Did we get back an active user?
-    #     self.validate_auth_user_status(user)
-    #
-    #     # If required, is the email verified?
-    #     if 'dj_rest_auth.registration' in settings.INSTALLED_APPS:
-    #         try:
-    #             self.validate_email_verification_status(user)
-    #         except ValidationError as v:
-    #             print(v.detail)
-    #
-    #     attrs['user'] = user
-    #     return attrs
-
 
 
 class UserDetailsSerializer(UserDetailsSerializer):
@@ -67,13 +40,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     # Define transaction.atomic to rollback the save operation in case of error
     @transaction.atomic
     def save(self, request):
-        print('picture: ', request.data)
         user = super().save(request)
         user.first_name = self.data.get('first_name')
         user.last_name = self.data.get('last_name')
         user.mobile = self.data.get('mobile')
         user.picture = request.data.get('picture')
-        print('cleaned picture: ', user.picture)
         user.save()
         return user
 
