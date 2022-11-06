@@ -1,31 +1,27 @@
 import http
 import os
+from datetime import datetime
 
+import requests
 from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress, EmailConfirmation, EmailConfirmationHMAC
 from allauth.account.utils import url_str_to_user_pk, user_pk_to_url_str, user_username
 from allauth.account.views import ConfirmEmailView
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.utils import build_absolute_uri
-from dj_rest_auth.app_settings import JWTSerializer, TokenSerializer
-from dj_rest_auth.registration.serializers import SocialLoginSerializer
-from django.core import signing
-from django.utils.translation import gettext_lazy as _
-from dj_rest_auth.registration.views import SocialLoginView, RegisterView, SocialConnectView
+from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, LoginView, UserDetailsView
 from django.conf import settings
-from django.contrib.auth import user_logged_out, authenticate
+from django.contrib.auth import user_logged_out, authenticate, login
 from django.contrib.sites.shortcuts import get_current_site
+from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from rest_framework import status, exceptions
-from rest_framework.exceptions import ValidationError, ErrorDetail
-from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from crowd_fund_app.forms import UserEditForm, UserRegisterForm
@@ -84,6 +80,10 @@ class CustomRegisterView(RegisterView):
 class CustomLoginView(LoginView):
 
     def post(self, request, *args, **kwargs):
+        print('login request: ', request.POST)
+        print('login args: ', args)
+        print('login kwargs: ', kwargs)
+
         self.request = request
         self.serializer = self.get_serializer(data=self.request.data)
 
@@ -119,21 +119,8 @@ def user_logout(request):
     if getattr(settings, 'REST_USE_JWT', False):
         from dj_rest_auth.jwt_auth import unset_jwt_cookies
         unset_jwt_cookies(response)
+    return redirect(reverse('home'), status=status.HTTP_200_OK)
     return response
-
-
-# class CustomLogoutView(LogoutView):
-#     def logout(self, request):
-#         response = super().logout(request)
-#         if response.status_code == status.HTTP_200_OK:
-#             return HttpResponse(r'You have successfully logged out.')
-#             # r'<meta http-equiv = "refresh" content = "3; url = http://localhost:8000" />')
-#         return HttpResponse(r'Problem logging out.'
-#                             r'<meta http-equiv = "refresh" content = "3; url = http://localhost:8000" />')
-
-
-# def get_user_details(request):
-#     return redirect(reverse('rest_user_details'), pk=request.user.id)
 
 
 def get_user_public_profile(request, user_id):
@@ -149,7 +136,10 @@ class CustomUserDetailsView(UserDetailsView):
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
         form = UserEditForm(instance=user)
-        return render(request, 'crowd_fund_app/user_profile.html', context={'form': form, 'user': user})
+        if 'https' in str(user.picture):
+            external_picture = True
+        return render(request, 'crowd_fund_app/user_profile.html',
+                      context={'form': form, 'user': user, 'external_picture': external_picture})
 
 
 def user_delete_direct(request):
@@ -286,7 +276,8 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
                           status=response.status_code)
             return HttpResponse(response.data.get('detail'), status=response.status_code)
         else:
-            return render(request, 'crowd_fund_app/register_msg.html', {'messages': [str(response.data.get('detail')).join('. Please try again')]},
+            return render(request, 'crowd_fund_app/register_msg.html',
+                          {'messages': [str(response.data.get('detail')).join('. Please try again')]},
                           status=response.status_code)
 
 
@@ -302,16 +293,41 @@ class DeleteUserView(PasswordResetView):
                                 status=response.status_code)
 
 
-class FacebookConnect(SocialConnectView):
-    adapter_class = FacebookOAuth2Adapter
+def facebook_login(request):
+    code = request.GET.get('code')
+    params = {
+        'client_id': '1570738886678657',
+        'redirect_uri': request.build_absolute_uri(reverse('fb_auth')),
+        'client_secret': '30245a4b531894136d32c248e32848cd',
+        'code': code
+    }
+    response = requests.get(url='https://graph.facebook.com/v15.0/oauth/access_token', params=params)
+    params = response.json()
+    params.update({
+        'fields': 'id,last_name,first_name,picture,birthday,email,gender,link'
+    })
 
+    user_data = requests.get('https://graph.facebook.com/me', params=params).json()
 
-def facebook_login(request, access_token, code):
-    pass
+    email = user_data.get('email')
+    user, _ = CustomUser.objects.get_or_create(email=email, username=email)
+    user.first_name = user_data.get('first_name')
+    user.last_name = user_data.get('last_name')
+    user.picture = user_data.get('picture').get('data').get('url')
+    user.is_active = True
+    user.birthdate = datetime.strptime(user_data.get('birthday'), '%m/%d/%Y')
+    user.facebook_profile = user_data.get('link')
+    user.country = user_data.get('location')
 
+    print('user data: ', user_data)
+    print('hometown: ', user_data.get('location'))
 
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
+    user.save()
+
+    user.backend = settings.AUTHENTICATION_BACKENDS[0]
+    login(request, user)
+
+    return redirect(reverse('home'))
 
 
 class UserProjectsViewSet(ProjectViewSet):

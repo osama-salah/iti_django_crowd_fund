@@ -20,11 +20,9 @@ from django.views.generic import TemplateView
 
 from crowd_fund import settings
 from crowd_fund.views import render_home
-from crowd_fund_app.crowd_fund_app.views import FacebookLogin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dj-rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     # path('/dj-rest-auth/token/verify/', ),
     path('projects/', include('projects.urls')),
     path('user/', include('crowd_fund_app.urls')),

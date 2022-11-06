@@ -1,8 +1,4 @@
-from allauth.account import views
-from allauth.account.views import ConfirmEmailView
-from dj_rest_auth.registration.views import RegisterView, VerifyEmailView, ResendEmailVerificationView
-from dj_rest_auth.views import UserDetailsView
-from django.urls import path, re_path, include, reverse
+from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 from rest_framework.routers import SimpleRouter
 
@@ -10,11 +6,9 @@ from crowd_fund_app.crowd_fund_app.views import user_edit, user_password_reset, 
     DeleteUserView, user_delete, user_delete_direct, CustomPasswordResetConfirmView, CustomPasswordResetView, \
     UserProjectsViewSet, user_details, CustomLoginView, resend_email_post, CustomUserDetailsView, \
     user_logout, CustomRegisterView, user_register, TestConfirmEmailView, resend_email_form, \
-    get_user_public_profile, FacebookLogin, FacebookConnect, facebook_login
+    get_user_public_profile, facebook_login
 
 urlpatterns = [
-    # path('registration/account-confirm-email/<str:key>/',
-    #      ConfirmEmailView.as_view()), TODO: remove this
     # re_path(r'^registration/account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(),
     #         name='account_confirm_email'),
     # ####### For testing activation link expiration
@@ -55,13 +49,9 @@ urlpatterns = [
     path('user/', CustomUserDetailsView.as_view(), name='user_profile'),
     path('public_profile/<user_id>', get_user_public_profile, name='user_public_profile'),
     # path('facebook/login/', FacebookLogin.as_view(), name='fb_login'),
-    re_path(r'facebook/login/(?P<match_string>)?[-:\w]+.*', facebook_login, name='fb_login'),
-    path('facebook/connect/', FacebookConnect.as_view(), name='fb_connect'),
-    path('facebook/test/', TemplateView.as_view(template_name='crowd_fund_app/facebook_login.html')),
-    path(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
+    re_path(r'^facebook/auth/', facebook_login, name='fb_auth'),
+    # path(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
     path('', include('dj_rest_auth.urls')),
-    # This path has already been included from 'dj_rest_auth.urls'. However, it is re-included just to
-    # match user/ path
 ]
 
 router = SimpleRouter()

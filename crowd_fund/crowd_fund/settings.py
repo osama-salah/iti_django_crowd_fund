@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-=d76gx%_5n%jii=t*#3)l_2-1x&^q86g)%x^$b-0qifg8(ztd@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['iti-crowd-fund.eg', 'localhost']
 
 # Application definition
 
@@ -55,10 +55,14 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-APP_SECRET = "abc123"
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'
 # This should be put in an env var
-FACEBOOK_CLIENT_ID = '1570738886678657'
+SOCIAL_AUTH_FACEBOOK_KEY = '1570738886678657'
+SOCIAL_AUTH_FACEBOOK_SECRET = '30245a4b531894136d32c248e32848cd'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

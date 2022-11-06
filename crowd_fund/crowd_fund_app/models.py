@@ -15,7 +15,7 @@ def mobile_validator(mobile):
 
 class CustomUser(AbstractUser):
     mobile = models.CharField(max_length=11, validators=[mobile_validator])
-    picture = models.ImageField(null=True, upload_to='crowd_fund_app/images/users/')
+    picture = models.ImageField(null=True, upload_to='crowd_fund_app/images/users/', max_length=500)
     status = models.CharField(max_length=9, choices=[
         ('inactive', 'Inactive'),       # Inactivated by an admin or timeout
         ('pending', 'Pending'),         # Hasn't activated his account yet
@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
         ('suspended', 'Suspended'),     # Banned
     ], default='pending')
     birthdate = models.DateField(null=True, blank=True)
-    facebook_profile = models.URLField(max_length=100, null=True, blank=True)
+    facebook_profile = models.URLField(max_length=500, null=True, blank=True)
     with open(f'{settings.BASE_DIR}/crowd_fund_app/static/crowd_fund_app/documents/countries.txt') as f:
         country = models.CharField(null=True, blank=True, choices=[(c[:-1], c[:-1]) for c in f.readlines()], max_length=50)
 
