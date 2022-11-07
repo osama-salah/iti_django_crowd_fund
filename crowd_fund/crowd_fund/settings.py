@@ -177,7 +177,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'crowd_fund_app.serializers.CustomRegisterSerializer',
 }
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
@@ -221,3 +220,8 @@ EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'user/login'
 
 # To customize email_confirmation_redirect_url
 ACCOUNT_ADAPTER = 'crowd_fund_app.adapter.CustomAccountAdapter'
+
+# Configure Django App for Heroku.
+import django_on_heroku
+
+django_on_heroku.settings(locals())
