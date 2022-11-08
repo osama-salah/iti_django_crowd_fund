@@ -101,6 +101,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'crowd_fund.context_processors.global_settings',
+)
+
 WSGI_APPLICATION = 'crowd_fund.wsgi.application'
 
 # Database
