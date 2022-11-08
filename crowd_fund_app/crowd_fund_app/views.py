@@ -136,6 +136,7 @@ class CustomUserDetailsView(UserDetailsView):
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
         form = UserEditForm(instance=user)
+        external_picture = False
         if 'https' in str(user.picture):
             external_picture = True
         return render(request, 'crowd_fund_app/user_profile.html',
