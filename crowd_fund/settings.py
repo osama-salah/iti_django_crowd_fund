@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-=d76gx%_5n%jii=t*#3)l_2-1x&^q86g)%x^$b-0qifg8(ztd@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['iti-crowd-fund.eg', 'localhost']
+DOMAIN = 'iti-django-crowdfund.herokuapp.com'
+
+ALLOWED_HOSTS = [DOMAIN, 'localhost']
 
 # Application definition
 
@@ -194,7 +196,9 @@ EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'crowdfund-auth'  # The cookie key name
 
-LOGIN_URL = 'http://localhost:8000/dj-rest-auth/login'
+LOGIN_URL = f'{DOMAIN}/dj-rest-auth/login'
+
+# LOGIN_URL = 'http://localhost:8000/dj-rest-auth/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
