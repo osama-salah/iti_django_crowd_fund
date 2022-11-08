@@ -30,6 +30,7 @@ DEBUG = True
 DOMAIN = 'iti-django-crowdfund.herokuapp.com'
 
 ALLOWED_HOSTS = [DOMAIN, 'localhost']
+CSRF_TRUSTED_ORIGINS = [f'https://{DOMAIN}']
 
 # Application definition
 
