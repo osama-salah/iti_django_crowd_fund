@@ -303,6 +303,10 @@ def facebook_login(request):
         'client_secret': '30245a4b531894136d32c248e32848cd',
         'code': code
     }
+
+    print('redirect_uri: ', request.build_absolute_uri(reverse('fb_auth')))
+    sys.stdout.flush()
+
     response = requests.get(url='https://graph.facebook.com/v15.0/oauth/access_token', params=params)
     params = response.json()
     params.update({
@@ -315,7 +319,7 @@ def facebook_login(request):
     user_data = requests.get('https://graph.facebook.com/me', params=params).json()
     print('user_data: ', user_data)
     sys.stdout.flush()
-    
+
 
     email = user_data.get('email')
     user, _ = CustomUser.objects.get_or_create(email=email, username=email)
