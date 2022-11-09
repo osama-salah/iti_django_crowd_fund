@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=d76gx%_5n%jii=t*#3)l_2-1x&^q86g)%x^$b-0qifg8(ztd@'
+# SECRET_KEY = 'django-insecure-=d76gx%_5n%jii=t*#3)l_2-1x&^q86g)%x^$b-0qifg8(ztd@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -64,8 +64,8 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'
 # This should be put in an env var
-SOCIAL_AUTH_FACEBOOK_KEY = '1570738886678657'
-SOCIAL_AUTH_FACEBOOK_SECRET = '30245a4b531894136d32c248e32848cd'
+# SOCIAL_AUTH_FACEBOOK_KEY = '1570738886678657'
+# SOCIAL_AUTH_FACEBOOK_SECRET = '30245a4b531894136d32c248e32848cd'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -214,7 +214,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'app.fundraise@gmail.com'
-EMAIL_HOST_PASSWORD = 'bdrkmgxbspzxavub'
+# EMAIL_HOST_PASSWORD = 'bdrkmgxbspzxavub'
 
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'crowd_fund_app.serializers.LoginSerializer',
