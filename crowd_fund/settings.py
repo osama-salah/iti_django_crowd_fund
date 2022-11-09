@@ -214,7 +214,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'app.fundraise@gmail.com'
-EMAIL_HOST_PASSWORD = 'gdf$#ss654dA@'
+EMAIL_HOST_PASSWORD = 'bdrkmgxbspzxavub'
 
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'crowd_fund_app.serializers.LoginSerializer',
