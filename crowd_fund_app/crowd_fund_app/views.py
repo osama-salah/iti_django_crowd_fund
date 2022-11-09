@@ -308,7 +308,9 @@ def facebook_login(request):
         'fields': 'id,last_name,first_name,picture,birthday,email,gender,link'
     })
 
+    print('params1: ', params)
     user_data = requests.get('https://graph.facebook.com/me', params=params).json()
+    print('user_data: ', user_data)
 
     email = user_data.get('email')
     user, _ = CustomUser.objects.get_or_create(email=email, username=email)
