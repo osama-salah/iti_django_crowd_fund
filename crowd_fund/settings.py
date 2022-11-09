@@ -77,6 +77,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+MIDDLEWARE_CLASSES = (
+    'sslify.middleware.SSLifyMiddleware',
+)
+
 ROOT_URLCONF = 'crowd_fund.urls'
 
 TEMPLATES = [
@@ -230,7 +234,13 @@ EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'user/login'
 # To customize email_confirmation_redirect_url
 ACCOUNT_ADAPTER = 'crowd_fund_app.adapter.CustomAccountAdapter'
 
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+
 # Configure Django App for Heroku.
 import django_on_heroku
 
 django_on_heroku.settings(locals())
+
