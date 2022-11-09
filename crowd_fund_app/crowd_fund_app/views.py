@@ -1,5 +1,6 @@
 import http
 import os
+import sys
 from datetime import datetime
 
 import requests
@@ -309,8 +310,12 @@ def facebook_login(request):
     })
 
     print('params1: ', params)
+    sys.stdout.flush()
+
     user_data = requests.get('https://graph.facebook.com/me', params=params).json()
     print('user_data: ', user_data)
+    sys.stdout.flush()
+    
 
     email = user_data.get('email')
     user, _ = CustomUser.objects.get_or_create(email=email, username=email)
