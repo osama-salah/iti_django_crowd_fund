@@ -16,6 +16,7 @@ import environ
 
 env = environ.Env()
 # reading .env file
+# remember to run heroku local to update env vars
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -59,8 +60,6 @@ INSTALLED_APPS = [
     'crowd_fund_app',
     'images',
 ]
-
-SITE_ID = 1
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
@@ -237,10 +236,7 @@ ACCOUNT_ADAPTER = 'crowd_fund_app.adapter.CustomAccountAdapter'
 SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-
-
 # Configure Django App for Heroku.
 import django_on_heroku
 
 django_on_heroku.settings(locals())
-
