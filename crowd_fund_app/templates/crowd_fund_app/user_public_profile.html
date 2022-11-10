@@ -6,7 +6,7 @@
 {% if external_picture %}
     <img src="{{user.picture}}" style="max-width: 200px; max-height: 200px; "/>
 {% else %}
-    <img src="{{MEDIA_URL}}{{form.picture.value}}" style="max-width: 200px; max-height: 200px; "/>
+    <img src="{{MEDIA_URL}}{{user.picture}}" style="max-width: 200px; max-height: 200px; "/>
 {% endif%}
 <table>
     <tr><td style="width:auto%; font-weight:bold; ">Username</td><td style="width:60%; ">{{user.username}}</td></tr>
