@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import datetime
 import os
 from pathlib import Path
 
@@ -20,20 +19,16 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from django.urls import reverse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-=d76gx%_5n%jii=t*#3)l_2-1x&^q86g)%x^$b-0qifg8(ztd@'
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 DOMAIN = 'iti-django-crowdfund.herokuapp.com'
 
