@@ -127,8 +127,10 @@ def user_logout(request):
 def get_user_public_profile(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if user:
-        print('user: ', user)
-        return render(request, 'crowd_fund_app/user_public_profile.html', context={'user': user})
+        external_picture = False
+        if 'https' in str(user.picture):
+            external_picture = True
+        return render(request, 'crowd_fund_app/user_public_profile.html', context={'user': user, 'external_picture': external_picture})
     return render(request, 'crowd_fund_app/register_msg.html',
                   {'messages': ["This user doesn't exist"]}, status=HTTP_400_BAD_REQUEST)
 
