@@ -10,6 +10,6 @@ Login:
         <input type="submit" value="Login">
     </form>
     <a href="{% url 'user_password_reset_request'%}">Forgot password</a>
-    <p><a href="https://www.facebook.com/v15.0/dialog/oauth?client_id=1570738886678657&redirect_uri=https://iti-django-crowdfund.herokuapp.com/user/facebook/auth/&state={st=state123abc,ds=123456789}&scope=email,public_profile,user_birthday,user_link,user_location">Facebook login</a></p>
+    <p><a href="https://www.facebook.com/v15.0/dialog/oauth?client_id=1570738886678657&redirect_uri={% settings_value 'FACEBOOK_REDIRECT_URL' %}&state={st=state123abc,ds=123456789}&scope=email,public_profile,user_birthday,user_link,user_location">Facebook login</a></p>
     <!--    <p><a href="https://www.facebook.com/v15.0/dialog/oauth?client_id=1570738886678657&redirect_uri=http://localhost:8000/user/facebook/auth/&state={st=state123abc,ds=123456789}&scope=email,public_profile,user_birthday,user_link,user_location">Facebook login</a></p>-->
 </div>

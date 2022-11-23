@@ -81,10 +81,6 @@ class CustomRegisterView(RegisterView):
 class CustomLoginView(LoginView):
 
     def post(self, request, *args, **kwargs):
-        print('login request: ', request.POST)
-        print('login args: ', args)
-        print('login kwargs: ', kwargs)
-
         self.request = request
         self.serializer = self.get_serializer(data=self.request.data)
 

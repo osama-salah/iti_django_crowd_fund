@@ -110,6 +110,7 @@ GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.j
 GS_BLOB_CHUNK_SIZE = 1024 * 256 * 40 # Needed for uploading large streams, entirely optional otherwise
 
 DOMAIN = 'iti-crowdfund.uc.r.appspot.com/'
+FACEBOOK_REDIRECT_URL = 'https://croudfund-service-umuxlijiva-uc.a.run.app/user/facebook/auth/'
 
 # ALLOWED_HOSTS = [DOMAIN, 'localhost']
 CSRF_TRUSTED_ORIGINS = [f'https://{DOMAIN}']
